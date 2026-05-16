@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  analytics-db:
+    image: mongo:7
+    container_name: analytics-db
+    ports:
+      - "27018:27017"
+    volumes:
+      - analytics-db-data:/data/db
+    networks:
+      - microservices
+    restart: unless-stopped
+
+  analytics-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: analytics-service
+    ports:
+      - "3003:3003"
+    environment:
+      - NODE_ENV=production
+      - PORT=3003
+      - MONGO_URI=mongodb://analytics-db:27017/analyticsdb
+    depends_on:
+      - analytics-db
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3003/health', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    restart: unless-stopped
+    networks:
+      - microservices
+
+volumes:
+  analytics-db-data:
+
+networks:
+  microservices:
+    driver: bridge
