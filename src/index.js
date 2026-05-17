@@ -4,7 +4,7 @@ const eventRoutes = require("./routes/events");
 const reportRoutes = require("./routes/reports");
 const authRoutes = require("./routes/auth");
 const { authenticateToken } = require("./middlewares/authMiddleware");
-const connectDB = require("./config/database");
+const { connectDB } = require("./config/database");
 
 const app = express();
 const PORT = process.env.PORT || 3003;
