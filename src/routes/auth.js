@@ -3,10 +3,11 @@ const jwt = require("jsonwebtoken");
 
 const router = Router();
 
-const JWT_SECRET = process.env.JWT_SECRET || "mySecretKeyForJWTTokenGenerationAndValidationPurposeOnly12345";
+const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "1h";
 
-// Endpoint de prueba temporal para generar JWT localmente.
+// Endpoint de prueba — solo disponible fuera de producción.
+if (process.env.NODE_ENV !== "production") {
 router.post("/test-token", (req, res) => {
   const { userId, email, role } = req.body;
 
@@ -26,5 +27,6 @@ router.post("/test-token", (req, res) => {
     expiresIn: JWT_EXPIRES_IN,
   });
 });
+}
 
 module.exports = router;
