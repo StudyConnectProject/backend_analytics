@@ -16,8 +16,15 @@ app.use(express.json());
 // Endpoint temporal de autenticación (pruebas locales)
 app.use("/auth", authRoutes);
 
-// Rutas protegidas con JWT
-app.use("/events", authenticateToken, eventRoutes);
+// POST /events es público para comunicación servicio-a-servicio
+// Las demás rutas de /events requieren autenticación
+const authOrInternal = (req, res, next) => {
+  if (req.method === "POST" && req.path === "/") {
+    return next();
+  }
+  return authenticateToken(req, res, next);
+};
+app.use("/events", authOrInternal, eventRoutes);
 app.use("/reports", authenticateToken, reportRoutes);
 
 // Health check

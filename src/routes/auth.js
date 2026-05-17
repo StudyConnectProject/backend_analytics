@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 
 const router = Router();
 
-const JWT_SECRET = process.env.JWT_SECRET || "dev-temporal-secret-change-me";
+const JWT_SECRET = process.env.JWT_SECRET || "mySecretKeyForJWTTokenGenerationAndValidationPurposeOnly12345";
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "1h";
 
 // Endpoint de prueba temporal para generar JWT localmente.
