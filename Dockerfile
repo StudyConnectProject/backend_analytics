@@ -2,9 +2,11 @@ FROM node:18-alpine
 
 WORKDIR /app
 
+ENV NODE_ENV=production
+
 COPY package*.json ./
 
-RUN npm install --production
+RUN npm install --omit=dev
 
 COPY src ./src
 
